@@ -62,9 +62,10 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
 
     @Override
     public void onListItemClick(int clickedItemIndex) {
-        Intent intent = new Intent(getApplicationContext(), Movie_details.class);
+        Intent intent = new Intent(getApplicationContext(), MovieDetails.class);
         intent.putExtra(getString(R.string.intentID), movies.get(clickedItemIndex).getId());
         startActivity(intent);
+
     }
 
     @Override

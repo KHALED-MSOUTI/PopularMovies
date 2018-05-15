@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".Rest.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -18,7 +19,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.Movie_details"></activity>
+        <activity android:name=".Activity.MovieDetails" />
+        <activity android:name=".Activity.Reviews" />
+        <activity android:name=".Activity.Trailers"></activity>
+        <provider
+            android:authorities="software.msouti.popularmovies"
+            android:name="software.msouti.popularmovies.Model.myContentProvider"
+            android:exported="false"/>
+
     </application>
 
 </manifest>

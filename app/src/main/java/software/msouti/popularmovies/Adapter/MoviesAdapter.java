@@ -7,8 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.List;
 
 import software.msouti.popularmovies.Model.Movie;
@@ -20,6 +18,7 @@ import software.msouti.popularmovies.R;
  */
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> {
+    private static final String TAG ="XXX" ;
     final private ListItemClickListener mOnClickListener;
     private List<Movie> movies;
     private int rowLayout;
@@ -43,7 +42,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     @Override
     public void onBindViewHolder(MovieViewHolder holder, final int position) {
         String imagePath = Tools.getImageURL(movies.get(position).getPoster_path());
-        Picasso.with(context).load(imagePath).into(holder.imageView);
+        Tools.loadPosterImage(TAG, imagePath, holder.imageView);
 
     }
 

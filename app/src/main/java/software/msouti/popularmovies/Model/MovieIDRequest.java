@@ -3,13 +3,14 @@ package software.msouti.popularmovies.Model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by kh200 on 06/03/2018.
  */
 
-public class MovieIDRequest {
+public class MovieIDRequest implements Serializable{
 
     @Expose
     @SerializedName("vote_count")

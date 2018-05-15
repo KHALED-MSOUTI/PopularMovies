@@ -2,7 +2,7 @@
     <string name="app_name">popularMovies</string>
 
     <!--Please Enter Your API_KEY HERE -->
-    <string name="apiKey" translatable="false"></string>
+    <string name="apiKey" translatable="false">957413e202e8b911c7b5134c3e38bb52</string>
 
     <!-- strings For Intent Keys and SharedPref Keys -->
     <string name="sortByBoolean" translatable="false">sortBy</string>
@@ -19,4 +19,6 @@
     <string name="menu_error">"Error with menu item !</string>
     <string name="API_error">Please obtain your API KEY from themoviedb.org in String.xml first!</string>
 
+    <!--MAIN URL FOR YouTube -->
+    <string name="YOUTUBE_MAIN_URL" translatable="false">https://www.youtube.com/watch?v=</string>
 </resources>
