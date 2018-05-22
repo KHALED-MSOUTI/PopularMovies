@@ -11,31 +11,14 @@ public class AppContract {
     public static final String AUTHORITY = "software.msouti.popularmovies";
 
     // The base content URI = "content://" + <authority>
-    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
+    static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
 
     // Define the possible paths for accessing data in this contract
     // This is the path for the "tasks" directory
     public static final String PATH_TASKS = "favorites";
 
-    public static final int ColumnMovieID_id = 1;
-    public static final int ColumnMovieName_id = 2;
-    public static final int ColumnMovieVoteAverge_id = 6;
-    public static final int ColumnMoviePosterPath_id = 4;
-    public static final int ColumnMovieRelaseDate_id = 5;
-    public static final int ColumnMovieOverView_id = 3;
 
-
-    public static final String[] Main_Movies_COLUMNS = {
-            AppEntery.ColumnMovieID,
-            AppEntery.ColumnMovieName,
-            AppEntery.ColumnMovieVoteAverge,
-            AppEntery.ColumnMoviePosterPath,
-            AppEntery.ColumnMovieRelaseDate,
-            AppEntery.ColumnMovieOverView
-    };
-
-
-    public static class AppEntery implements BaseColumns{
+    public static class AppEatery implements BaseColumns{
 
         // TaskEntry content URI = base content URI + path
         public static final Uri CONTENT_URI =

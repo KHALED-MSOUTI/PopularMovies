@@ -5,19 +5,25 @@
     <string name="apiKey" translatable="false">957413e202e8b911c7b5134c3e38bb52</string>
 
     <!-- strings For Intent Keys and SharedPref Keys -->
-    <string name="sortByBoolean" translatable="false">sortBy</string>
+    <string name="sortByBoolean" translatable="false">sort</string>
     <string name="intentID" translatable="false">intentID</string>
+    <string name="scroll_pref" translatable="false">Scroll_pref</string>
 
     <!--UI Strings -->
     <string name="sortBy">Sort By popularity</string>
     <string name="sort_by_popularity">Sort By Popularity</string>
     <string name="sort_by_top_rated">Sort By Top Rated</string>
+    <string name="sort_by_favorite">Favorites</string>
     <string name="textViewRelaseDate">Release Date : </string>
     <string name="textViewOverView">OverView : </string>
     <string name="voting">Voting</string>
     <string name="connection_error">"Please check your internet connection and try again !"</string>
     <string name="menu_error">"Error with menu item !</string>
     <string name="API_error">Please obtain your API KEY from themoviedb.org in String.xml first!</string>
+    <string name="done_with_retrofet2">Added to database Using RETROFIT !</string>
+    <string name="retrofit_error">ERrOr !!!!</string>
+    <string name="json_error">Failed To get response from Json</string>
+    <string name="added_to_favorite">Added to Favorite</string>
 
     <!--MAIN URL FOR YouTube -->
     <string name="YOUTUBE_MAIN_URL" translatable="false">https://www.youtube.com/watch?v=</string>

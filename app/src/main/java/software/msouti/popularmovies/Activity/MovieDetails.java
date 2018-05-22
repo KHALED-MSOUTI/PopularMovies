@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -28,9 +27,10 @@ import software.msouti.popularmovies.R;
 import software.msouti.popularmovies.Rest.ApiClient;
 import software.msouti.popularmovies.Rest.ApiInterface;
 
-import static software.msouti.popularmovies.Model.AppContract.AppEntery.CONTENT_URI;
+import static software.msouti.popularmovies.Model.AppContract.AppEatery.CONTENT_URI;
 
-public class MovieDetails extends AppCompatActivity  {
+public class MovieDetails extends AppCompatActivity {
+    final String TAG = "XXX";
     String API_KEY;
     MovieIDRequest movie = new MovieIDRequest();
     @BindView(R.id.mImageViewArraw)
@@ -55,7 +55,6 @@ public class MovieDetails extends AppCompatActivity  {
     ImageView commentsImageView;
     @BindView(R.id.favoriteImageView)
     ImageView favoriteImageView;
-    final String TAG= "XXX";
     String movie_id;
 
     @Override
@@ -66,42 +65,37 @@ public class MovieDetails extends AppCompatActivity  {
         ButterKnife.bind(this);
         API_KEY = getString(R.string.apiKey);
         movie_id = getIntent().getExtras().getString(getString(R.string.intentID));
-        if (savedInstanceState!=null){
-            movie= (MovieIDRequest) savedInstanceState.getSerializable("movie");
-            fillOutDetails(movie);
-        }else {
-            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-            Call<MovieIDRequest> call = apiService.getMovieByID(movie_id, API_KEY);
-            call.enqueue(new Callback<MovieIDRequest>() {
-                @Override
-                public void onResponse(Call<MovieIDRequest> call, Response<MovieIDRequest> response) {
-                    movie = response.body();
-                    fillOutDetails(movie);
-                    ContentValues contentValues = new ContentValues();
-                    contentValues.put(AppContract.AppEntery.ColumnMovieRelaseDate, movie.getRelease_date());
-                    contentValues.put(AppContract.AppEntery.ColumnMovieName, movie.getTitle());
-                    contentValues.put(AppContract.AppEntery.ColumnMovieID, movie.getId());
-                    contentValues.put(AppContract.AppEntery.ColumnMovieOverView, movie.getOverview());
-                    contentValues.put(AppContract.AppEntery.ColumnMoviePosterPath, movie.getPoster_path());
-                    contentValues.put(AppContract.AppEntery.ColumnMovieRelaseDate, movie.getRelease_date());
-                    contentValues.put(AppContract.AppEntery.ColumnFav, false);
-                    //Insert film into Database !!
-                    Uri uri = getContentResolver().insert(AppContract.AppEntery.CONTENT_URI, contentValues);
-                    if (uri != null) {
-                        Toast.makeText(getApplicationContext(), "Added to database Using RETROFIT !", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "ERrOr !!!!", Toast.LENGTH_SHORT).show();
-                    }
-                    getContentResolver().notifyChange(CONTENT_URI, null);
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        Call<MovieIDRequest> call = apiService.getMovieByID(movie_id, API_KEY);
+        call.enqueue(new Callback<MovieIDRequest>() {
+            @Override
+            public void onResponse(Call<MovieIDRequest> call, Response<MovieIDRequest> response) {
+                movie = response.body();
+                fillOutDetails(movie);
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(AppContract.AppEatery.ColumnMovieRelaseDate, movie.getRelease_date());
+                contentValues.put(AppContract.AppEatery.ColumnMovieName, movie.getTitle());
+                contentValues.put(AppContract.AppEatery.ColumnMovieID, movie.getId());
+                contentValues.put(AppContract.AppEatery.ColumnMovieOverView, movie.getOverview());
+                contentValues.put(AppContract.AppEatery.ColumnMoviePosterPath, movie.getPoster_path());
+                //TODO: fix voteAverge it Added As null !!
+                contentValues.put(AppContract.AppEatery.ColumnMovieVoteAverge, movie.getVote_average());
+                contentValues.put(AppContract.AppEatery.ColumnFav, false);
+                //Insert film into Database !!
+                Uri uri = getContentResolver().insert(AppContract.AppEatery.CONTENT_URI, contentValues);
+                if (uri != null) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.done_with_retrofet2), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), getString(R.string.retrofit_error), Toast.LENGTH_SHORT).show();
                 }
+                getContentResolver().notifyChange(CONTENT_URI, null);
+            }
 
-                @Override
-                public void onFailure(Call<MovieIDRequest> call, Throwable t) {
-                    Toast.makeText(getApplicationContext(), "Failed To get response from Json", Toast.LENGTH_LONG).show();
-                }
-            });
-        }
-
+            @Override
+            public void onFailure(Call<MovieIDRequest> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), getString(R.string.json_error), Toast.LENGTH_LONG).show();
+            }
+        });
 
 
         trailerImageView.setOnClickListener(new View.OnClickListener() {
@@ -133,21 +127,21 @@ public class MovieDetails extends AppCompatActivity  {
                 String movieRelaseDate = movie.getRelease_date();
                 Double movieRate = movie.getVote_average();
                 ContentValues contentValues = new ContentValues();
-                contentValues.put(AppContract.AppEntery.ColumnMovieRelaseDate, movieRelaseDate);
-                contentValues.put(AppContract.AppEntery.ColumnMovieName, movieName);
-                contentValues.put(AppContract.AppEntery.ColumnMovieID, movieID);
-                contentValues.put(AppContract.AppEntery.ColumnMovieOverView, movieOverView);
-                contentValues.put(AppContract.AppEntery.ColumnMoviePosterPath, moviePosterPath);
-                contentValues.put(AppContract.AppEntery.ColumnMovieRelaseDate, movieRate);
-                contentValues.put(AppContract.AppEntery.ColumnFav, true);
-                String where = AppContract.AppEntery.ColumnMovieID + " = " + movieID;
-                int isUpdated = getContentResolver().update(AppContract.AppEntery.CONTENT_URI, contentValues, where, null);
+                contentValues.put(AppContract.AppEatery.ColumnMovieRelaseDate, movieRelaseDate);
+                contentValues.put(AppContract.AppEatery.ColumnMovieName, movieName);
+                contentValues.put(AppContract.AppEatery.ColumnMovieID, movieID);
+                contentValues.put(AppContract.AppEatery.ColumnMovieOverView, movieOverView);
+                contentValues.put(AppContract.AppEatery.ColumnMoviePosterPath, moviePosterPath);
+                contentValues.put(AppContract.AppEatery.ColumnMovieRelaseDate,String.valueOf( movieRate));
+                contentValues.put(AppContract.AppEatery.ColumnFav, true);
+                String where = AppContract.AppEatery.ColumnMovieID + " = " + movieID;
+                int isUpdated = getContentResolver().update(AppContract.AppEatery.CONTENT_URI, contentValues, where, null);
                 if (isUpdated > 0) {
-                    Toast.makeText(getApplicationContext(), "Added to Favorite", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.added_to_favorite), Toast.LENGTH_SHORT).show();
                     favoriteImageView.setImageResource(R.drawable.golden_star);
 
                 } else {
-                    Toast.makeText(getApplicationContext(), "ERrOr !!!!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.retrofit_error), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -163,17 +157,7 @@ public class MovieDetails extends AppCompatActivity  {
 
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        outState.putSerializable("movie",movie);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        movie= (MovieIDRequest) savedInstanceState.getSerializable("movie");
-        fillOutDetails(movie);
-    }
-    public void fillOutDetails(MovieIDRequest movieIDRequest){
+    public void fillOutDetails(MovieIDRequest movieIDRequest) {
         Tools.loadPosterImage(TAG, Tools.getImageURL(movieIDRequest.getPoster_path()), mImageViewMovie);
         Tools.loadPosterImage(TAG, Tools.getImageURL(movieIDRequest.getPoster_path()), posterImageView);
         toolbar.setTitle(movieIDRequest.getTitle());

@@ -11,7 +11,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import static software.msouti.popularmovies.Model.AppContract.AppEntery.TableName;
+import static software.msouti.popularmovies.Model.AppContract.AppEatery.TableName;
 
 
 public class myContentProvider extends ContentProvider {
@@ -68,7 +68,7 @@ public class myContentProvider extends ContentProvider {
 
         switch (match) {
             case FAVORITE:
-                return AppContract.AppEntery.CONTENT_TYPE;
+                return AppContract.AppEatery.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -88,7 +88,7 @@ public class myContentProvider extends ContentProvider {
                 long id=db.insert(TableName,null,values);
                 if(id>0){
                     //Success
-                    returnUri= ContentUris.withAppendedId(AppContract.AppEntery.CONTENT_URI,id);
+                    returnUri= ContentUris.withAppendedId(AppContract.AppEatery.CONTENT_URI,id);
                 }else{
                     //print error msg
                     throw new android.database.SQLException("Wrong URI >>" + uri);

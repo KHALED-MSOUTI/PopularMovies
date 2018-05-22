@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import java.util.List;
 
+import software.msouti.popularmovies.Model.ListMovieCP;
 import software.msouti.popularmovies.Model.Movie;
 import software.msouti.popularmovies.Model.Tools;
 import software.msouti.popularmovies.R;
@@ -22,14 +23,19 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     final private ListItemClickListener mOnClickListener;
     private List<Movie> movies;
     private int rowLayout;
-    private Context context;
+    List<ListMovieCP> listMovieCPS;
 
-
-    public MoviesAdapter(ListItemClickListener mOnClickListener, List<Movie> movies, int rowLayout, Context context) {
+    public MoviesAdapter(ListItemClickListener mOnClickListener, List<Movie> movies, int rowLayout) {
         this.mOnClickListener = mOnClickListener;
         this.movies = movies;
         this.rowLayout = rowLayout;
-        this.context = context;
+    }
+    //Second Constructor to Load Data From ContentProvider
+    public  MoviesAdapter(int rowLayout,ListItemClickListener mOnClickListener,List<ListMovieCP> listMovieCPS){
+        this.mOnClickListener=mOnClickListener;
+        this.listMovieCPS=listMovieCPS;
+        this.rowLayout=rowLayout;
+
     }
 
     @Override
@@ -41,8 +47,14 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
     @Override
     public void onBindViewHolder(MovieViewHolder holder, final int position) {
-        String imagePath = Tools.getImageURL(movies.get(position).getPoster_path());
-        Tools.loadPosterImage(TAG, imagePath, holder.imageView);
+        if (movies!= null){
+            String imagePath = Tools.getImageURL(movies.get(position).getPoster_path());
+            Tools.loadPosterImage(TAG, imagePath, holder.imageView);
+
+        }else{
+            String imagePath = Tools.getImageURL(listMovieCPS.get(position).getPoster_path());
+            Tools.loadPosterImage(TAG, imagePath, holder.imageView);
+        }
 
     }
 
@@ -72,4 +84,5 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
             mOnClickListener.onListItemClick(clickedPosition);
         }
     }
+
 }
