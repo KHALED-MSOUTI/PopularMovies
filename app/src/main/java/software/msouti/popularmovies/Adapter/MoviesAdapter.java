@@ -50,7 +50,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         if (movies!= null){
             String imagePath = Tools.getImageURL(movies.get(position).getPoster_path());
             Tools.loadPosterImage(TAG, imagePath, holder.imageView);
-
         }else{
             String imagePath = Tools.getImageURL(listMovieCPS.get(position).getPoster_path());
             Tools.loadPosterImage(TAG, imagePath, holder.imageView);
@@ -68,7 +67,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
     public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView imageView;
-
 
         public MovieViewHolder(View v) {
             super(v);

@@ -122,8 +122,8 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
                     null
             );
 
-            if (mCursor!=null){
-                Toast.makeText(getApplicationContext(), "Cursor not null !", Toast.LENGTH_SHORT).show();
+            if (mCursor.getCount()>=1){
+                Toast.makeText(getApplicationContext(), "Cursor is not null !", Toast.LENGTH_SHORT).show();
                 List<ListMovieCP> listMovieCPS=new ArrayList<>();
                 mCursor.moveToFirst();
                 for (int count=0;count<mCursor.getCount();count++){
@@ -140,6 +140,9 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
                 }
                 //TODO: show Data with the second Constructor of MovieAdapter
                 //HERE !!
+
+            }else{
+                Toast.makeText(getApplicationContext(), "Cursor is null !", Toast.LENGTH_SHORT).show();
 
             }
         }else{
