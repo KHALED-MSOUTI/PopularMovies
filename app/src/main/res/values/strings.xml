@@ -2,7 +2,7 @@
     <string name="app_name">popularMovies</string>
 
     <!--Please Enter Your API_KEY HERE -->
-    <string name="apiKey" translatable="false">957413e202e8b911c7b5134c3e38bb52</string>
+    <string name="apiKey" translatable="false"></string>
 
     <!-- strings For Intent Keys and SharedPref Keys -->
     <string name="sortByBoolean" translatable="false">sort</string>
