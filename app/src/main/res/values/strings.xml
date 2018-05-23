@@ -20,10 +20,11 @@
     <string name="connection_error">"Please check your internet connection and try again !"</string>
     <string name="menu_error">"Error with menu item !</string>
     <string name="API_error">Please obtain your API KEY from themoviedb.org in String.xml first!</string>
-    <string name="done_with_retrofet2">Added to database Using RETROFIT !</string>
+    <string name="done_with_retrofet2">Added to Favorite !</string>
     <string name="retrofit_error">ERrOr !!!!</string>
     <string name="json_error">Failed To get response from Json</string>
     <string name="added_to_favorite">Added to Favorite</string>
+    <string name="no_fav">There is no favorite Movies yet !</string>
 
     <!--MAIN URL FOR YouTube -->
     <string name="YOUTUBE_MAIN_URL" translatable="false">https://www.youtube.com/watch?v=</string>

@@ -45,14 +45,19 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
     String API_KEY = null;
     GridLayoutManager gridLayoutManager;
     MoviesAdapter myAdapter;
-    Parcelable mListState;
-    String LIST_STATE_KEY="state_key";
+    private int mOffset;
+    private static final String SCROLL_OFFSET = "SCROLL_OFFSET";
+    List<ListMovieCP> listMovieCPS;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (savedInstanceState != null) {
+            mOffset = savedInstanceState.getInt(SCROLL_OFFSET, 0);
+        }
         //TODO - insert your themoviedb.org API KEY in String.xml
         API_KEY = getString(R.string.apiKey);
         SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.sortByBoolean), 0);
@@ -73,12 +78,20 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
                 sortMoviesBy(SORT_BY_FAVORITE);
             }
         }
+        recyclerView.smoothScrollBy(0, mOffset);
+
     }
 
     @Override
     public void onListItemClick(int clickedItemIndex) {
         Intent intent = new Intent(getApplicationContext(), MovieDetails.class);
-        intent.putExtra(getString(R.string.intentID), movies.get(clickedItemIndex).getId());
+        if (movies!=null){
+            intent.putExtra(getString(R.string.intentID), movies.get(clickedItemIndex).getId());
+        }else{
+            intent.putExtra(getString(R.string.intentID), listMovieCPS.get(clickedItemIndex).getId());
+            intent.putExtra("fav","yes");
+        }
+
         startActivity(intent);
 
     }
@@ -93,7 +106,6 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
             Toast.makeText(getApplicationContext(), getString(R.string.API_error), Toast.LENGTH_SHORT).show();
         } else {
             if (sort== sMostPopular) {
-
                 sortMoviesBy(SORT_BY_POPULARITY);
             } else if (sort == sTopRated){
                 sortMoviesBy(SORT_BY_TOP_RATED);
@@ -101,9 +113,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
                 sortMoviesBy(SORT_BY_FAVORITE);
             }
         }
-        if (mListState != null) {
-            recyclerView.getLayoutManager().onRestoreInstanceState(mListState);
-        }
+        recyclerView.smoothScrollBy(0, mOffset);
     }
 
     public void sortMoviesBy(String sortBy) {
@@ -112,8 +122,6 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
                 R.layout.list_item_movie
                 ) ;
         if (sortBy == SORT_BY_FAVORITE){
-            Toast.makeText(getApplicationContext(), "sorted by "+ SORT_BY_FAVORITE, Toast.LENGTH_SHORT).show();
-
             //If user select to SORT_BY_FAVORITE this method will get the movies from ContentProvider and Show it
             Cursor mCursor= getContentResolver().query(AppContract.AppEatery.CONTENT_URI,
                     null,
@@ -121,10 +129,8 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
                     null,
                     null
             );
-
+            listMovieCPS=new ArrayList<>();
             if (mCursor.getCount()>=1){
-                Toast.makeText(getApplicationContext(), "Cursor is not null !", Toast.LENGTH_SHORT).show();
-                List<ListMovieCP> listMovieCPS=new ArrayList<>();
                 mCursor.moveToFirst();
                 for (int count=0;count<mCursor.getCount();count++){
                     // Fill listMovieCPS with data from mCursor and
@@ -138,12 +144,14 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
                             ));
                     mCursor.moveToNext();
                 }
-                //TODO: show Data with the second Constructor of MovieAdapter
-                //HERE !!
+                myAdapter = new MoviesAdapter(R.layout.list_item_movie,
+                        MainActivity.this,listMovieCPS
+                        ) ;
+                recyclerView.setAdapter(myAdapter);
+                myAdapter.notifyDataSetChanged();
 
             }else{
-                Toast.makeText(getApplicationContext(), "Cursor is null !", Toast.LENGTH_SHORT).show();
-
+                Toast.makeText(getApplicationContext(), getString(R.string.no_fav), Toast.LENGTH_SHORT).show();
             }
         }else{
 
@@ -161,6 +169,8 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
                             R.layout.list_item_movie) ;
                     recyclerView.setAdapter(myAdapter);
                     myAdapter.notifyDataSetChanged();
+                    recyclerView.smoothScrollBy(0, mOffset);
+
                 }
 
 
@@ -169,8 +179,9 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
                     Toast.makeText(MainActivity.this, getString(R.string.connection_error), Toast.LENGTH_SHORT).show();
                 }
             });
-
         }
+
+
     }
 
     @Override
@@ -217,19 +228,19 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
         return true;
     }
     @Override
-    protected void onSaveInstanceState(Bundle state) {
+    public void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
-
-        // Save list state
-        mListState = recyclerView.getLayoutManager().onSaveInstanceState();
-        state.putParcelable(LIST_STATE_KEY, mListState);
+        state.putInt(SCROLL_OFFSET, recyclerView.computeVerticalScrollOffset());
     }
-    @Override
-    protected void onRestoreInstanceState(Bundle state) {
-        super.onRestoreInstanceState(state);
 
-        // Retrieve list state and list/item positions
-        if(state != null)
-            mListState = state.getParcelable(LIST_STATE_KEY);
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            mOffset = savedInstanceState.getInt(SCROLL_OFFSET, 0);
+            recyclerView.smoothScrollBy(0, mOffset);
+
+
+        }
     }
 }

@@ -65,6 +65,9 @@ public class MovieDetails extends AppCompatActivity {
         ButterKnife.bind(this);
         API_KEY = getString(R.string.apiKey);
         movie_id = getIntent().getExtras().getString(getString(R.string.intentID));
+        if (getIntent().hasExtra("fav")){
+            favoriteImageView.setImageResource(R.drawable.golden_star);
+        }
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
         Call<MovieIDRequest> call = apiService.getMovieByID(movie_id, API_KEY);
         call.enqueue(new Callback<MovieIDRequest>() {
@@ -72,23 +75,6 @@ public class MovieDetails extends AppCompatActivity {
             public void onResponse(Call<MovieIDRequest> call, Response<MovieIDRequest> response) {
                 movie = response.body();
                 fillOutDetails(movie);
-                ContentValues contentValues = new ContentValues();
-                contentValues.put(AppContract.AppEatery.ColumnMovieRelaseDate, movie.getRelease_date());
-                contentValues.put(AppContract.AppEatery.ColumnMovieName, movie.getTitle());
-                contentValues.put(AppContract.AppEatery.ColumnMovieID, movie.getId());
-                contentValues.put(AppContract.AppEatery.ColumnMovieOverView, movie.getOverview());
-                contentValues.put(AppContract.AppEatery.ColumnMoviePosterPath, movie.getPoster_path());
-                //TODO: fix voteAverge it Added As null !!
-                contentValues.put(AppContract.AppEatery.ColumnMovieVoteAverge, movie.getVote_average());
-                contentValues.put(AppContract.AppEatery.ColumnFav, false);
-                //Insert film into Database !!
-                Uri uri = getContentResolver().insert(AppContract.AppEatery.CONTENT_URI, contentValues);
-                if (uri != null) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.done_with_retrofet2), Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), getString(R.string.retrofit_error), Toast.LENGTH_SHORT).show();
-                }
-                getContentResolver().notifyChange(CONTENT_URI, null);
             }
 
             @Override
@@ -134,16 +120,13 @@ public class MovieDetails extends AppCompatActivity {
                 contentValues.put(AppContract.AppEatery.ColumnMoviePosterPath, moviePosterPath);
                 contentValues.put(AppContract.AppEatery.ColumnMovieRelaseDate,String.valueOf( movieRate));
                 contentValues.put(AppContract.AppEatery.ColumnFav, true);
-                String where = AppContract.AppEatery.ColumnMovieID + " = " + movieID;
-                int isUpdated = getContentResolver().update(AppContract.AppEatery.CONTENT_URI, contentValues, where, null);
-                if (isUpdated > 0) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.added_to_favorite), Toast.LENGTH_SHORT).show();
-                    favoriteImageView.setImageResource(R.drawable.golden_star);
-
+                Uri uri = getContentResolver().insert(AppContract.AppEatery.CONTENT_URI, contentValues);
+                if (uri != null) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.done_with_retrofet2), Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getApplicationContext(), getString(R.string.retrofit_error), Toast.LENGTH_SHORT).show();
                 }
-
+                getContentResolver().notifyChange(CONTENT_URI, null);
             }
         });
 

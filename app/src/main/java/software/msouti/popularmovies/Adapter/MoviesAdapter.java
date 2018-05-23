@@ -59,7 +59,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
     @Override
     public int getItemCount() {
-        return movies.size();
+        if (movies!=null){
+            return movies.size();
+        }else{
+            return listMovieCPS.size();
+        }
+
     }
     public interface ListItemClickListener {
         void onListItemClick(int clickedItemIndex);
